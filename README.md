@@ -1,10 +1,10 @@
 # Bundle Protocol SDK (BP-SDK)
 
-Clean, modern APIs for NASA's ION-DTN Bundle Protocol implementation, available in both C and Rust.
+Clean, modern protoype API for BP implementation, available in both C and Rust.
 
 ## Overview
 
-BP-SDK provides high-level interfaces to ION-DTN's Bundle Protocol implementation:
+BP-SDK provides high-level interfaces to a few DTNs, including ION-DTN. uD3tn, and HDTN
 
 - **C API**: Wrapper over ION-DTN, uD3tn, HDTN with automated memory management
 - **Rust API**: Type-safe, async interface with zero-copy operations
