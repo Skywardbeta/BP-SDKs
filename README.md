@@ -6,12 +6,13 @@ Clean, modern APIs for NASA's ION-DTN Bundle Protocol implementation, available 
 
 BP-SDK provides high-level interfaces to ION-DTN's Bundle Protocol implementation:
 
-- **C API**: Thin wrapper over ION-DTN with automatic memory management
+- **C API**: Wrapper over ION-DTN, uD3tn, HDTN with automated memory management
 - **Rust API**: Type-safe, async interface with zero-copy operations
 - **Cross-Compatible**: Both APIs work with the same ION-DTN installation
 - **Thread-Safe**: Safe concurrent operations in both languages
 
 ## Installation
+ION-DTN as example
 
 ### Prerequisites
 
@@ -82,14 +83,14 @@ use std::time::Duration;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Initialize
+
     let sdk = BpSdk::new(Eid::new("ipn:1.1")?, None)?;
     sdk.init().await?;
     
-    // Create endpoint
+
     let endpoint = sdk.create_endpoint(Eid::new("ipn:1.1")?).await?;
     
-    // Send bundle
+
     let bundle = Bundle::new(
         Eid::new("ipn:1.1")?,
         Eid::new("ipn:2.1")?,
@@ -97,7 +98,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
     sdk.send(bundle).await?;
     
-    // Receive bundle
+
     match endpoint.receive(Some(Duration::from_secs(10))).await {
         Ok(bundle) => {
             println!("Received: {}", 
@@ -107,7 +108,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Err(e) => eprintln!("Error: {}", e),
     }
     
-    // Cleanup
     sdk.shutdown().await?;
     Ok(())
 }
@@ -134,16 +134,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 # Build examples
 make examples
 
-# Send a message
 ./build/simple_send ipn:1.1 ipn:2.1 "Hello, DTN!"
-
-# Listen for messages
 ./build/simple_receive ipn:2.1
 ```
 
 ### Run Rust Examples
 ```bash
-# Simple examples
 cargo run --example simple_send
 cargo run --example simple_receive
 ```
@@ -189,18 +185,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 ### C Tests
 ```bash
-# Run C tests
+
 make test
 ./build/test_runner
 ```
 
 ### Rust Tests
 ```bash
-# Run Rust tests
+
 cd rust/
 cargo test
 
-# Run specific tests
+
 cargo test test_eid_validation
 cargo test --test integration
 ```
@@ -242,14 +238,10 @@ match sdk.send(bundle).await {
 
 ### C Administrative API
 ```c
-// Add routing plan
 bp_admin_add_plan("ipn:2.0", 1000000);
-
-// Add contact
 time_t start = time(NULL);
 bp_admin_add_contact("ipn:2.1", start, start + 3600, 1000000);
 
-// Add range information
 bp_admin_add_range("ipn:2.1", start, start + 3600, 5);
 ```
 
