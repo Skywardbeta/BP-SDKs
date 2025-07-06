@@ -4,7 +4,7 @@ Clean, modern protoype API for BP implementation, available in both C and Rust.
 
 ## Overview
 
-BP-SDK provides high-level interfaces to a few DTNs, including ION-DTN. uD3tn, and HDTN
+BP-SDK provides high-level interfaces to DTNs
 
 - **C API**: Wrapper over ION-DTN, uD3tn, HDTN with automated memory management
 - **Rust API**: Type-safe, async interface with zero-copy operations
