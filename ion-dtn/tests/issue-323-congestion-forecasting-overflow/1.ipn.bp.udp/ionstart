@@ -1,9 +1,0 @@
-#!/bin/bash
-# shell script to get node running
-ionadmin	config.ionrc
-
-ionsecadmin	config.ionsecrc &
-
-bpadmin		config.bprc
-
-ipnadmin	config.ipnrc &

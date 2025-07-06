@@ -1,8 +1,0 @@
-#!/bin/bash
-#
-# Samuel Jero
-# Ohio University
-# October 3, 2012
-
-echo "Cleaning up old ION..."
-rm -f ion_nodes ion.log bpdriverAduFile

@@ -1,8 +1,0 @@
-#!/bin/bash
-ionadmin	amroc.ionrc
-
-acsadmin	amroc.acsrc
-
-ionsecadmin	amroc.ionsecrc &
-
-bpadmin		amroc.bprc &

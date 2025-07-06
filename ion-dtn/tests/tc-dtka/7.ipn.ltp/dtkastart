@@ -1,6 +1,0 @@
-#!/bin/bash
-tccadmin 203	../node.tccrc
-sleep 1
-dtkaadmin	../node.dtkarc
-sleep 1
-dtka &

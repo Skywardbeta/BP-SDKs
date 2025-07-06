@@ -1,3 +1,0 @@
-#/bin/bash
-rm -f ion.log bpdriver.txt bpecho.txt bpdriverAduFile
-killm
