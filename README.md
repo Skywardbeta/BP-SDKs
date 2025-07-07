@@ -49,14 +49,11 @@ ION-DTN as example
 #include "bp_sdk.h"
 
 int main() {
-    // Initialize
     bp_init("ipn:1.1", NULL);
     
-    // Send bundle
     bp_send("ipn:1.1", "ipn:2.1", "Hello", 5, 
             BP_PRIORITY_STANDARD, BP_CUSTODY_NONE, 3600, NULL);
     
-    // Receive bundle
     bp_endpoint_t *endpoint;
     bp_endpoint_create("ipn:2.1", &endpoint);
     bp_endpoint_register(endpoint);
@@ -67,7 +64,6 @@ int main() {
         bp_bundle_free(bundle);
     }
     
-    // Cleanup
     bp_endpoint_unregister(endpoint);
     bp_endpoint_destroy(endpoint);
     bp_shutdown();
