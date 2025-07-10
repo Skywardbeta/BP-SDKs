@@ -17,13 +17,21 @@ libc = "0.2"
 parking_lot = "0.12"
 async-trait = "0.1"
 bytes = { version = "1.0", features = ["serde"] }
+hex = "0.4"
+rand = "0.8"
+ring = "0.17"
 
 [dev-dependencies]
 tokio-test = "0.4"
+criterion = { version = "0.5", features = ["html_reports"] }
 
 [lib]
 name = "bp_sdk"
 crate-type = ["cdylib", "rlib"]
 
 [build-dependencies]
-cc = "1.0" 
+cc = "1.0"
+
+[[bench]]
+name = "bp_benchmarks"
+harness = false 

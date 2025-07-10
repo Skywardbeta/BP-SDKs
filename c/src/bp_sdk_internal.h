@@ -59,6 +59,11 @@ int bp_route_create(const char *dest_eid, const char *next_hop, uint32_t cost,
 int bp_route_destroy(bp_route_t *route);
 int bp_route_list_destroy(bp_route_t *routes, int count);
 
+// Security functions
+int bp_security_create_aes_gcm(bp_security_t **security);
+int bp_security_create_hmac_sha256(bp_security_t **security);
+int bp_security_destroy(bp_security_t *security);
+
 // Admin functions
 int bp_admin_add_scheme(const char *scheme_name, const char *forwarder_cmd, const char *admin_cmd);
 int bp_admin_remove_scheme(const char *scheme_name);

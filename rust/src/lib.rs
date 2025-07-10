@@ -7,14 +7,25 @@ pub mod types;
 pub mod ffi;
 pub mod core;
 pub mod cla;
+pub mod bpsec;
+pub mod routing;
+pub mod metrics;
+pub mod testing;
 
 pub use error::{BpError, BpResult};
 pub use types::{Bundle, Custody, Eid, Priority, Statistics, Route, Contact, Range, TransportConfig, BpTimestamp};
 pub use core::{BpSdk, Endpoint};
 pub use cla::{Cla, ClaManager, TcpCla, UdpCla};
+pub use bpsec::{BpsecManager, SecurityBlock, SecurityPolicy};
+pub use routing::{RoutingEngine, EpidemicRouting, SprayAndWaitRouting};
+pub use metrics::{MetricsCollector, PerformanceMetrics};
 
 pub mod prelude {
-    pub use crate::{BpSdk, Endpoint, Bundle, Eid, Priority, Custody, BpError, BpResult, Cla, ClaManager};
+    pub use crate::{
+        BpSdk, Endpoint, Bundle, Eid, Priority, Custody, 
+        BpError, BpResult, Cla, ClaManager, BpsecManager,
+        RoutingEngine, MetricsCollector, Route, Contact
+    };
 }
 
 #[cfg(test)]
@@ -148,5 +159,53 @@ mod tests {
         assert!(timestamp.msec > 0);
         let datetime = timestamp.to_datetime();
         assert!(datetime.timestamp() > 0);
+    }
+
+    #[tokio::test]
+    async fn test_bpsec_operations() {
+        let manager = BpsecManager::new();
+        
+        let key = bytes::Bytes::from_static(b"test_key_32_bytes_long_example__");
+        assert!(manager.add_key("default", key).is_ok());
+        
+        let policy = SecurityPolicy::new("test_policy", crate::bpsec::SecurityOperation::Encrypt);
+        
+        assert!(manager.add_policy(policy).is_ok());
+        assert!(manager.get_policy("test_policy").is_some());
+        
+        let bundle = Bundle::new(
+            Eid::new("ipn:1.1").unwrap(),
+            Eid::new("ipn:2.1").unwrap(),
+            "test data"
+        );
+        
+        let secured_bundle = manager.apply_security(&bundle).unwrap();
+        assert!(secured_bundle.payload.len() >= bundle.payload.len());
+    }
+
+    #[test]
+    fn test_routing_engines() {
+        let epidemic = EpidemicRouting::new();
+        let spray_wait = SprayAndWaitRouting::new(10);
+        
+        assert_eq!(epidemic.name(), "epidemic");
+        assert_eq!(spray_wait.name(), "spray_and_wait");
+        
+        let dest = Eid::new("ipn:2.1").unwrap();
+        let routes = epidemic.compute_routes(&dest, &vec![]);
+        assert!(!routes.is_empty());
+    }
+
+    #[test]
+    fn test_metrics_collection() {
+        let collector = MetricsCollector::new();
+        collector.record_bundle_sent(1024);
+        collector.record_bundle_received(512);
+        
+        let metrics = collector.get_metrics();
+        assert_eq!(metrics.bundles_sent, 1);
+        assert_eq!(metrics.bytes_sent, 1024);
+        assert_eq!(metrics.bundles_received, 1);
+        assert_eq!(metrics.bytes_received, 512);
     }
 } 
